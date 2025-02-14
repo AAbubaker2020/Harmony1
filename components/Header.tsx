@@ -4,19 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import LanguageSwitcher from "./LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, X } from "lucide-react";
+import { Sun, Moon, X, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 
-// Define the valid navigation items explicitly
 const navItems = ["home", "about", "services", "contact"] as const;
 
 const Header = () => {
-  const { translations } = useLanguage();
+  const { translations, language, setLanguage } = useLanguage();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,60 +35,54 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          {/* Logo Section */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="logo-container relative w-12 h-12">
-              <Image
-                src="/Hamony Industrial BC 04.jpg"
-                alt="Harmony Industrial Solutions Logo"
-                layout="fill"
-                objectFit="cover"
-              />
+              <Image src="/Hamony Industrial BC 04.jpg" alt="Harmony Industrial Solutions Logo" layout="fill" objectFit="cover" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-heading font-bold gradient-text">
-                HARMONY
-              </span>
+              <span className="text-xl font-heading font-bold gradient-text">HARMONY</span>
               <span className="text-sm text-harmony-gold">INDUSTRIAL</span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           {!isMobile && (
             <nav className="hidden md:flex items-center space-x-8">
               {navItems.map((item) => (
-                <Link
-                  key={item}
-                  href={`/${item === "home" ? "" : item}`}
-                  className="nav-link text-sm font-medium text-harmony-soft-white hover:text-harmony-gold transition-colors duration-300"
-                >
+                <Link key={item} href={`/${item === "home" ? "" : item}`} className="nav-link text-sm font-medium text-harmony-soft-white hover:text-harmony-gold transition-colors duration-300">
                   {translations[item as keyof typeof translations]}
                 </Link>
               ))}
             </nav>
           )}
 
-          {/* Right-side Actions */}
           <div className="flex items-center space-x-4">
-            {/* Language Switcher */}
-            <LanguageSwitcher />
+            <div className="relative">
+              <button
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                className="p-2 flex items-center space-x-2 rounded-full bg-harmony-metallic-silver hover:bg-harmony-gold hover:text-harmony-slate-gray transition-colors duration-300"
+              >
+                
+                <span>{language === "en" ? "English" : "العربية"}</span>
+                <ChevronDown size={16} />
+              </button>
+              {isLangDropdownOpen && (
+                <div className="absolute top-full mt-2 w-32 header-footer-bg shadow-md rounded-lg">
+                  <button className="flex items-center px-4 py-2 w-full hover:bg-harmony-gold" onClick={() => setLanguage("en")}>
+EN
+</button>
+                  <button className="flex items-center px-4 py-2 w-full hover:bg-harmony-gold" onClick={() => setLanguage("ar")}>
+AR
+</button>
+                </div>
+              )}
+            </div>
 
-            {/* Dark Mode Toggle */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={toggleDarkMode}
-              className="p-2 rounded-full bg-harmony-metallic-silver hover:bg-harmony-gold hover:text-harmony-slate-gray transition-colors duration-300"
-            >
+            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={toggleDarkMode} className="p-2 rounded-full bg-harmony-metallic-silver hover:bg-harmony-gold hover:text-harmony-slate-gray transition-colors duration-300">
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </motion.button>
 
-            {/* Mobile Menu Toggle (Only for Small Screens) */}
             {isMobile && (
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 md:hidden flex flex-col space-y-1"
-              >
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 md:hidden flex flex-col space-y-1">
                 {isMenuOpen ? (
                   <X size={24} className="text-harmony-soft-white" />
                 ) : (
@@ -103,32 +96,6 @@ const Header = () => {
             )}
           </div>
         </div>
-
-        {/* Mobile Menu (Only for Small Screens) */}
-        <AnimatePresence>
-          {isMobile && isMenuOpen && (
-            <motion.nav
-              className="md:hidden absolute top-full left-0 right-0 header-footer-bg border-b border-border shadow-lg"
-              initial={{ opacity: 0, x: "100%" }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: "100%" }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="container py-4 space-y-4">
-                {navItems.map((item) => (
-                  <Link
-                    key={item}
-                    href={`/${item === "home" ? "" : item}`}
-                    className="block nav-link text-sm font-medium text-harmony-soft-white hover:text-harmony-gold px-4 py-2 transition-colors duration-300"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {translations[item as keyof typeof translations]}
-                  </Link>
-                ))}
-              </div>
-            </motion.nav>
-          )}
-        </AnimatePresence>
       </div>
     </motion.header>
   );

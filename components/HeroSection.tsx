@@ -1,52 +1,44 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { useLanguage } from "@/contexts/LanguageContext"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const images = [
   "/Hamonymain.png",
   "/biomass.png",
   "/AI.png"
-]
+];
 
 const HeroSection = () => {
-  const { language } = useLanguage()
-  const [currentImage, setCurrentImage] = useState(2)
+  const { language } = useLanguage();
+  const [currentImage, setCurrentImage] = useState(2);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length)
-    }, 5000)
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 5000);
 
-    return () => clearInterval(timer) // Cleanup interval on component unmount
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section className="relative h-screen overflow-hidden">
-      <AnimatePresence mode="wait">
-        {images.map(
-          (src, index) =>
-            currentImage === index && (
-              <motion.div
-                key={src}
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
-              >
-                <div
-                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url(${src})` }}
-                />
-                <div className="absolute inset-0 bg-black/50" /> {/* Overlay for readability */}
-              </motion.div>
-            )
-        )}
-      </AnimatePresence>
+      <div className="absolute inset-0">
+        {images.map((src, index) => (
+          <motion.div
+            key={src}
+            className={`absolute inset-0 ${currentImage === index ? "opacity-100" : "opacity-0"}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentImage === index ? 1 : 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: "center" }}
+          />
+        ))}
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
 
       <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
         <motion.h1
@@ -73,9 +65,8 @@ const HeroSection = () => {
 
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 0 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
         >
           <Link
             href="/services"
@@ -85,7 +76,6 @@ const HeroSection = () => {
             <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Link>
 
-
           <Link
             href="/contact"
             className="premium-button px-8 py-3 rounded-full text-white font-medium flex items-center group bg-harmony-gold hover:bg-harmony-deep-gold transition-colors"
@@ -93,8 +83,6 @@ const HeroSection = () => {
             {language === "en" ? "Contact Us" : "اتصل بنا"}
             <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Link>
-
-      
         </motion.div>
 
         {/* Image Navigation Dots */}
@@ -111,7 +99,7 @@ const HeroSection = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;
