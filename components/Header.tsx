@@ -27,34 +27,12 @@ const Header = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Framer Motion Animations
-  const headerVariants = {
-    hidden: { y: -100 },
-    visible: {
-      y: 0,
-      transition: { type: "spring", stiffness: 100, damping: 20 },
-    },
-  };
-
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      x: "100%",
-      transition: { type: "tween", duration: 0.3 },
-    },
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: { type: "tween", duration: 0.3 },
-    },
-  };
-
   return (
     <motion.header
       className="fixed w-full top-0 z-50 header-footer-bg border-b border-border shadow-lg"
-      initial="hidden"
-      animate="visible"
-      variants={headerVariants}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
@@ -103,40 +81,24 @@ const Header = () => {
               onClick={toggleDarkMode}
               className="p-2 rounded-full bg-harmony-metallic-silver hover:bg-harmony-gold hover:text-harmony-slate-gray transition-colors duration-300"
             >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isDarkMode ? "dark" : "light"}
-                  initial={{ y: -20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 20, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                </motion.div>
-              </AnimatePresence>
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </motion.button>
 
             {/* Mobile Menu Toggle (Only for Small Screens) */}
             {isMobile && (
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 md:hidden"
+                className="p-2 md:hidden flex flex-col space-y-1"
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={isMenuOpen ? "open" : "closed"}
-                    initial={{ rotate: 0, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 180, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {isMenuOpen ? (
-                      <X size={24} className="text-harmony-soft-white" />
-                    ) : (
-                      <Menu size={24} className="text-harmony-soft-white" />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
+                {isMenuOpen ? (
+                  <X size={24} className="text-harmony-soft-white" />
+                ) : (
+                  <div className="flex flex-col space-y-1">
+                    <span className="block w-6 h-1 bg-white"></span>
+                    <span className="block w-6 h-1 bg-white"></span>
+                    <span className="block w-6 h-1 bg-white"></span>
+                  </div>
+                )}
               </button>
             )}
           </div>
@@ -147,10 +109,10 @@ const Header = () => {
           {isMobile && isMenuOpen && (
             <motion.nav
               className="md:hidden absolute top-full left-0 right-0 header-footer-bg border-b border-border shadow-lg"
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={menuVariants}
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ duration: 0.3 }}
             >
               <div className="container py-4 space-y-4">
                 {navItems.map((item) => (
