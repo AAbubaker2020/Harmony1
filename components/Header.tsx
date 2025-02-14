@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sun, Moon, Menu, X } from "lucide-react";
+import { Sun, Moon, X } from "lucide-react";
 import { useState, useEffect } from "react";
 
 // Define the valid navigation items explicitly
