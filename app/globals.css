@@ -1,0 +1,242 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --harmony-gold: 193, 151, 80;
+  --harmony-soft-white: 248, 248, 248;
+  --harmony-warm-gray: 217, 217, 217;
+  --harmony-metallic-silver: 176, 176, 176;
+  --harmony-deep-bronze: 156, 107, 48;
+  --harmony-industrial-orange: 249, 115, 0;
+  --harmony-slate-gray: 107, 107, 107;
+
+  /* Light mode */
+  --background: 248, 248, 248;
+  --foreground: 107, 107, 107;
+  --card: 255, 255, 255;
+  --card-foreground: 107, 107, 107;
+  --popover: 255, 255, 255;
+  --popover-foreground: 107, 107, 107;
+  --primary: var(--harmony-gold);
+  --primary-foreground: 255, 255, 255;
+  --secondary: var(--harmony-metallic-silver);
+  --secondary-foreground: 107, 107, 107;
+  --muted: 217, 217, 217;
+  --muted-foreground: 156, 107, 48;
+  --accent: var(--harmony-deep-bronze);
+  --accent-foreground: 255, 255, 255;
+  --border: 217, 217, 217;
+  --input: 217, 217, 217;
+  --ring: var(--harmony-gold);
+  --header-footer-bg: 107, 107, 107;
+  --section-dark: 217, 217, 217;
+  --section-light: 248, 248, 248;
+}
+
+.dark {
+  --background: 107, 107, 107;
+  --foreground: 248, 248, 248;
+  --card: 156, 107, 48;
+  --card-foreground: 248, 248, 248;
+  --popover: 156, 107, 48;
+  --popover-foreground: 248, 248, 248;
+  --primary: var(--harmony-gold);
+  --primary-foreground: 107, 107, 107;
+  --secondary: var(--harmony-metallic-silver);
+  --secondary-foreground: 248, 248, 248;
+  --muted: 176, 176, 176;
+  --muted-foreground: 217, 217, 217;
+  --accent: var(--harmony-industrial-orange);
+  --accent-foreground: 248, 248, 248;
+  --border: 176, 176, 176;
+  --input: 176, 176, 176;
+  --ring: var(--harmony-gold);
+  --header-footer-bg: 156, 107, 48;
+  --section-dark: 156, 107, 48;
+  --section-light: 107, 107, 107;
+}
+
+/* Smooth transitions */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease, opacity 0.3s
+    ease;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Orbitron", sans-serif;
+}
+
+/* Premium Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease forwards;
+}
+
+/* Hero Section */
+.hero-overlay {
+  background: linear-gradient(to bottom, rgba(var(--background), 0) 0%, rgba(var(--background), 0.8) 100%);
+}
+
+/* Header and Footer Styles */
+.header-footer-bg {
+  background-color: rgb(var(--header-footer-bg));
+}
+
+/* Section Styles */
+.section-dark {
+  background-color: rgb(var(--section-dark));
+}
+
+.section-light {
+  background-color: rgb(var(--section-light));
+}
+
+.social-icon {
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+  color: rgb(var(--harmony-gold));
+  transform: translateY(-2px);
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* Premium Button Effects */
+.premium-button {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, rgb(var(--harmony-deep-bronze)) 0%, rgb(var(--harmony-industrial-orange)) 100%);
+  transition: all 0.3s ease;
+}
+
+.premium-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+  transition: left 0.5s ease;
+}
+
+.premium-button:hover::before {
+  left: 100%;
+}
+
+.premium-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--harmony-gold), 0.2);
+}
+
+/* Card Effects */
+.premium-card {
+  background: rgba(var(--card), 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--harmony-gold), 0.1);
+  transition: all 0.3s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(var(--harmony-gold), 0.3);
+  box-shadow: 0 8px 24px rgba(var(--harmony-gold), 0.15);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(45deg, rgb(var(--harmony-gold)) 0%, rgb(var(--harmony-deep-bronze)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Logo Styles */
+.logo-container {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid rgb(var(--harmony-gold));
+  transition: all 0.3s ease;
+}
+
+.logo-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(var(--harmony-gold), 0.3);
+}
+
+/* Improved Readability */
+.text-shadow {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: rgb(var(--harmony-gold));
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
