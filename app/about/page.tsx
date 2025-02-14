@@ -103,7 +103,7 @@ export default function About() {
           <div className="space-y-12">
             {[
               { year: "2014", event: "Harmony Industrial Solutions was founded" },
-              { year: "2021", event: "Expanded operations to 20 countries" },
+              { year: "2021", event: "Expanded operations to 6 countries" },
               { year: "2025", event: "Launched sustainable industrial solutions initiative" },
             ].map((milestone, index) => (
               <motion.div
