@@ -104,7 +104,7 @@ const Header = () => {
               </AnimatePresence>
             </motion.button>
 
-            {/* Mobile Menu Toggle */}
+            {/* Mobile Menu Toggle (Only for Small Screens) */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 md:hidden"
@@ -128,7 +128,7 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu (Only for Small Screens) */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.nav

@@ -7,9 +7,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 const translations = {
-  about: "حول",
+  home: "حول",
+  about: "عن الشركة",
   services: "الخدمات",
-  projects: "المشاريع",
   contact: "اتصل بنا",
   "quick-links": "روابط سريعة",
   "contact-us": "اتصل بنا",
@@ -78,7 +78,7 @@ const Footer = () => {
           <motion.div variants={itemVariants} className="space-y-4">
             <h3 className="text-lg font-bold text-yellow-400">{t("quick-links")}</h3>
             <ul className="space-y-2">
-              {(["about", "services", "projects", "contact"] as TranslationKeys[]).map((link) => (
+              {(["about", "services", "contact"] as TranslationKeys[]).map((link) => (
                 <li key={link}>
                   <Link href={`/${link}`} className="text-sm text-gray-400 hover:text-yellow-400 flex items-center group">
                     <ArrowRight className="w-4 h-4 mr-2 transition-transform group-hover:translate-x-1" />
