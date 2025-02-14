@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Sun, Moon, X, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -61,18 +61,13 @@ const Header = () => {
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
                 className="p-2 flex items-center space-x-2 rounded-full bg-harmony-metallic-silver hover:bg-harmony-gold hover:text-harmony-slate-gray transition-colors duration-300"
               >
-                
-                <span>{language === "en" ? "English" : "العربية"}</span>
+                <span>{language === "en" ? "EN" : "AR"}</span>
                 <ChevronDown size={16} />
               </button>
               {isLangDropdownOpen && (
                 <div className="absolute top-full mt-2 w-32 header-footer-bg shadow-md rounded-lg">
-                  <button className="flex items-center px-4 py-2 w-full hover:bg-harmony-gold" onClick={() => setLanguage("en")}>
-EN
-</button>
-                  <button className="flex items-center px-4 py-2 w-full hover:bg-harmony-gold" onClick={() => setLanguage("ar")}>
-AR
-</button>
+                  <button className="flex items-center px-4 py-2 w-full hover:bg-harmony-gold" onClick={() => setLanguage("en")}>EN</button>
+                  <button className="flex items-center px-4 py-2 w-full hover:bg-harmony-gold" onClick={() => setLanguage("ar")}>AR</button>
                 </div>
               )}
             </div>
@@ -96,6 +91,18 @@ AR
             )}
           </div>
         </div>
+
+        {isMobile && isMenuOpen && (
+          <motion.nav className="md:hidden absolute top-full left-0 right-0 header-footer-bg border-b border-border shadow-lg" initial={{ opacity: 0, x: "100%" }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: "100%" }} transition={{ duration: 0.3 }}>
+            <div className="container py-4 space-y-4">
+              {navItems.map((item) => (
+                <Link key={item} href={`/${item === "home" ? "" : item}`} className="block nav-link text-sm font-medium text-harmony-soft-white hover:text-harmony-gold px-4 py-2 transition-colors duration-300" onClick={() => setIsMenuOpen(false)}>
+                  {translations[item as keyof typeof translations]}
+                </Link>
+              ))}
+            </div>
+          </motion.nav>
+        )}
       </div>
     </motion.header>
   );
