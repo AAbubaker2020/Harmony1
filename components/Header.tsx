@@ -7,7 +7,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Define the valid navigation items explicitly
 const navItems = ["home", "about", "services", "contact"] as const;
@@ -16,6 +16,16 @@ const Header = () => {
   const { translations } = useLanguage();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Framer Motion Animations
   const headerVariants = {
@@ -67,17 +77,19 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item}
-                href={`/${item === "home" ? "" : item}`}
-                className="nav-link text-sm font-medium text-harmony-soft-white hover:text-harmony-gold transition-colors duration-300"
-              >
-                {translations[item as keyof typeof translations]}
-              </Link>
-            ))}
-          </nav>
+          {!isMobile && (
+            <nav className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item}
+                  href={`/${item === "home" ? "" : item}`}
+                  className="nav-link text-sm font-medium text-harmony-soft-white hover:text-harmony-gold transition-colors duration-300"
+                >
+                  {translations[item as keyof typeof translations]}
+                </Link>
+              ))}
+            </nav>
+          )}
 
           {/* Right-side Actions */}
           <div className="flex items-center space-x-4">
@@ -105,32 +117,34 @@ const Header = () => {
             </motion.button>
 
             {/* Mobile Menu Toggle (Only for Small Screens) */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 md:hidden"
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isMenuOpen ? "open" : "closed"}
-                  initial={{ rotate: 0, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 180, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isMenuOpen ? (
-                    <X size={24} className="text-harmony-soft-white" />
-                  ) : (
-                    <Menu size={24} className="text-harmony-soft-white" />
-                  )}
-                </motion.div>
-              </AnimatePresence>
-            </button>
+            {isMobile && (
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 md:hidden"
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={isMenuOpen ? "open" : "closed"}
+                    initial={{ rotate: 0, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 180, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {isMenuOpen ? (
+                      <X size={24} className="text-harmony-soft-white" />
+                    ) : (
+                      <Menu size={24} className="text-harmony-soft-white" />
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </button>
+            )}
           </div>
         </div>
 
         {/* Mobile Menu (Only for Small Screens) */}
         <AnimatePresence>
-          {isMenuOpen && (
+          {isMobile && isMenuOpen && (
             <motion.nav
               className="md:hidden absolute top-full left-0 right-0 header-footer-bg border-b border-border shadow-lg"
               initial="closed"
