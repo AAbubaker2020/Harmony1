@@ -1,21 +1,47 @@
-"use client"
+"use client";
 
-import { useLanguage } from "@/contexts/LanguageContext"
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { Icon } from "@iconify/react"
-import type React from "react"
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Icon } from "@iconify/react";
+import type React from "react";
 
 export default function Contact() {
-  const { language } = useLanguage()
-  const [formStatus, setFormStatus] = useState("")
+  const { language } = useLanguage();
+  const [formStatus, setFormStatus] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // Here you would typically send the form data to your backend
-    // For this example, we'll just set a success message
-    setFormStatus(language === "en" ? "Message sent successfully!" : "تم إرسال الرسالة بنجاح!")
-  }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setFormStatus("");
+
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setFormStatus(language === "en" ? "Message sent successfully! We will reach out soon." : "تم إرسال الرسالة بنجاح! سنتواصل معك قريبًا.");
+        e.currentTarget.reset();
+      } else {
+        setFormStatus(language === "en" ? "Failed to send message. Try again." : "فشل في إرسال الرسالة. حاول مرة أخرى.");
+      }
+    } catch (error) {
+      setFormStatus(language === "en" ? "Error sending message." : "خطأ في إرسال الرسالة.");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen py-24">
@@ -79,8 +105,9 @@ export default function Contact() {
                 className="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-medium hover:bg-accent/90 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                disabled={loading}
               >
-                {language === "en" ? "Send Message" : "إرسال الرسالة"}
+                {loading ? (language === "en" ? "Sending..." : "جار الإرسال...") : language === "en" ? "Send Message" : "إرسال الرسالة"}
               </motion.button>
             </form>
             {formStatus && <p className="mt-4 text-green-600 font-bold">{formStatus}</p>}
@@ -91,42 +118,21 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <h2 className="text-2xl font-bold mb-6 gradient-text">{language === "en" ? "Our Location" : "موقعنا"}</h2>
-            <p className="mb-6">
-              {language === "en"
-                ? "123 Industrial Avenue, Tech City, 12345, Country"
-                : "123 شارع الصناعة، مدينة التكنولوجيا، 12345، الدولة"}
-            </p>
-            <h3 className="text-xl font-bold mb-4 gradient-text">
-              {language === "en" ? "Contact Information" : "معلومات الاتصال"}
-            </h3>
+            <p className="mb-6">123 Industrial Avenue, Tech City, 12345, Country</p>
+            <h3 className="text-xl font-bold mb-4 gradient-text">{language === "en" ? "Contact Information" : "معلومات الاتصال"}</h3>
             <div className="space-y-4">
               <div className="flex items-center">
                 <Icon icon="mdi:email" className="text-2xl text-accent mr-2" />
-                <p>info@harmonyindustrial.com</p>
+                <p>info@harmonyprecision.com</p>
               </div>
               <div className="flex items-center">
                 <Icon icon="mdi:phone" className="text-2xl text-accent mr-2" />
                 <p>+1 (555) 123-4567</p>
               </div>
             </div>
-            <div className="mt-8">
-              <h3 className="text-xl font-bold mb-4 gradient-text">{language === "en" ? "Follow Us" : "تابعنا"}</h3>
-              <div className="flex space-x-4">
-                <a href="#" className="text-2xl text-accent hover:text-accent/80 transition-colors">
-                  <Icon icon="mdi:facebook" />
-                </a>
-                <a href="#" className="text-2xl text-accent hover:text-accent/80 transition-colors">
-                  <Icon icon="mdi:twitter" />
-                </a>
-                <a href="#" className="text-2xl text-accent hover:text-accent/80 transition-colors">
-                  <Icon icon="mdi:linkedin" />
-                </a>
-              </div>
-            </div>
           </motion.div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
